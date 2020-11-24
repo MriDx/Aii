@@ -18,44 +18,38 @@ const Route = use('Route')
 
 Route.on('/').render('welcome')
 
-Route.post('size', 'SizeController.store')
+
 
 
 //Products
 Route.group(() => {
 
-  Route.post('add/product', 'ProductController.store')
-
-  Route.post('product/desc/:id', 'ProductController.addDesc')
-
   Route.get('products', 'ProductController.index')
 
   Route.get('products/:page', 'ProductController.index')
-
-  //Route.get('product/:id', 'StockController.show')
 
   Route.get('product/:id', 'ProductController.show')
 
   Route.get('product/:product_id/:size_id', 'StockController.checkStock')
 
-  Route.post('addStock', 'StockController.store')
+  //Route.post('addStock', 'StockController.store')
 
-  Route.post('product/addImage', 'ImageController.store')
+  //Route.post('product/addImage', 'ImageController.store')
 
-  Route.post('product/tag/:id', 'ProductController.addTags')
+  //Route.post('product/tag/:id', 'ProductController.addTags')
 
 }).prefix('api/v1/')
 
 
-Route.post('updateStock/:product_id/:size_id', 'StockController.updateStock')
+//Route.post('updateStock/:product_id/:size_id', 'StockController.updateStock')
 
-Route.post('upload', 'FileController.upload');
+//Route.post('upload', 'FileController.upload');
 
-Route.post('uploadMultiple', 'FileController.uploadMultiple');
+//Route.post('uploadMultiple', 'FileController.uploadMultiple');
 
 Route.get('download/:fileName', 'FileController.download');
 
-Route.post('addImage', 'ImageController.store')
+//Route.post('addImage', 'ImageController.store')
 
 Route.group(() => {
   Route.get('content/:dir/:file', 'FileController.file')
@@ -102,23 +96,23 @@ Route.post('order', 'OrderController.store').middleware('auth')
 
 Route.get('orders', 'OrderController.index').middleware('auth') */
 
-Route.group(function() {
+/* Route.group(function() {
   Route.post('category/add', 'CategoryController.store').middleware('auth')
   Route.get('categories', 'CategoryController.index')
   Route.post('category/:id', 'CategoryController.update')
-}).prefix('api/v1/')
+}).prefix('api/v1/') */
 
 Route.get('home', 'HomeController.index').middleware('auth').prefix('api/v1')
 
 
 Route.get('featured', 'FeaturedController.index').middleware('auth').prefix('api/v1')
-Route.post('featured/add', 'FeaturedController.store').middleware('auth').prefix('api/v1')
+//Route.post('featured/add', 'FeaturedController.store').middleware('auth').prefix('api/v1')
 
 Route.get('category/products/:id/:page', 'ProductController.bycategory').prefix('api/v1')
 
 
-Route.post('checksum/generate', 'PaytmController.checksum').prefix('api/v1/')
-Route.post('checksum/validate', 'PaytmController.validate').prefix('api/v1/')
+//Route.post('checksum/generate', 'PaytmController.checksum').prefix('api/v1/')
+//Route.post('checksum/validate', 'PaytmController.validate').prefix('api/v1/')
 
 
 //add product to homepage
@@ -131,5 +125,35 @@ Route.group('adminapp', () => {
   Route.get('products/:page', 'AdminController.products')
   Route.get('products/:page/:limit', 'AdminController.productsC')
   Route.get('orders/:page', 'AdminController.orders')
+  Route.get('orders/:page/:limit', 'AdminController.ordersC')
   Route.post('pincode/add', 'PincodeController.store')
+
+  //product
+  Route.post('add/product', 'ProductController.store')
+  Route.post('product/desc/:id', 'ProductController.addDesc')
+
+  //categories
+  Route.get('categories', 'AdminController.categories')
+  Route.post('category/add', 'CategoryController.store')
+  //Route.get('categories', 'CategoryController.index')
+  Route.post('category/:id', 'CategoryController.update')
+
+  //sizes
+  Route.post('size', 'SizeController.store')
+  Route.get('sizes', 'SizeController.index')
+
+
+  //stock
+  Route.post('addStock', 'StockController.store')
+
+
+  //image upload
+  Route.post('addImage', 'FileController.upload')
+  Route.post('upload', 'FileController.upload')
+  Route.get('content/:file', 'FileController.tmpImage')
+  Route.post('saveImage/:id', 'ImageController.saveBulk')
+  Route.post('product/addImage', 'ImageController.store')
+  Route.get('content/:dir/:file', 'FileController.file')
 }).prefix('admin/api/v1/')
+
+Route.on('/*').render('welcome')

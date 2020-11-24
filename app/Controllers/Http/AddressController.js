@@ -55,7 +55,12 @@ class AddressController {
     try {
       const user = await auth.getUser()
       if (await Pincode.findBy('pin', request.body.pin) == null) {
-        return response.status(402).json({status: 'failed', message: 'we currently do not deliver at your address'})
+        return response
+        .status(200)
+        .json({
+          status: 'failed',
+          message: 'we currently do not deliver at your address'
+        })
       }
       const add = user.addresses().create(request.all())
       return add

@@ -47,7 +47,8 @@ class ImageController {
   async store ({ request, auth, response }) {
     let product_id = request.body.product_id
     try {
-      await auth.getUser()
+      //const user = await auth.getUser()
+      //let admin = await Admin.findByOrFail('id', user.id)
       const validationOptions = {
         types: ['image'],
         size: '1mb',
@@ -58,7 +59,7 @@ class ImageController {
         overwrite: true,
       })
       if (!imageFile.moved()) {
-        return imageFile.error();
+        throw imageFile.error()
       }
       const img = await Image.create({product_id: product_id, url: `product/${imageFile.fileName}`})
       return response.json({
@@ -67,7 +68,8 @@ class ImageController {
       })
     } catch (error) {
       return response.status(403).json({
-        status: 'failed'
+        status: 'failed',
+        error: error
       })
     }
 
@@ -117,6 +119,35 @@ class ImageController {
    * @param {Response} ctx.response
    */
   async destroy ({ params, request, response }) {
+  }
+
+  async saveBulk({request, params:{id}, auth, response}) {
+    try {
+      //const user = await auth.getUser()
+      //let admin = await Admin.findByOrFail('id', user.id)
+      let images = request.body.images
+
+      for (i=0; i < images.length(); i++) {
+        console.info(images[i])
+        let imageFile = Drive.tmpPath(`tmp_uploads/${images[i]}`)
+        console.log(imageFile)
+        const newImg = `product/${id}_${new Date().getTime()}.${imageFile.subtype}`
+
+        await Drive.move(Helpers.tmpPath(`tmp_uploads/${images[i]}`), Helpers.publicPath(newImg))
+
+      }
+
+      return response.json({
+        status: 'success',
+        message: 'images added'
+      })
+
+    } catch (error) {
+      return response.status(403).json({
+        status: 'failed',
+        message: 'failed to add images'
+      })
+    }
   }
 }
 

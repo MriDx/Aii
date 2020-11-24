@@ -5,6 +5,7 @@
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 const Size = use('App/Models/Size');
+const Admin = use('App/Models/Admin')
 
 /**
  * Resourceful controller for interacting with sizes
@@ -19,7 +20,21 @@ class SizeController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index ({ request, auth, response, view }) {
+
+    try {
+      //let user = await auth.getUser()
+      //let admin = await Admin.findByOrFail('id', user.id)
+
+      return await Size.all()
+
+    } catch (error) {
+      return response.status(403).json({
+        status: 'failed',
+        error
+      })
+    }
+
   }
 
   /**

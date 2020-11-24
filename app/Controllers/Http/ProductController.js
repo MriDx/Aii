@@ -216,8 +216,8 @@ class ProductController {
   }
 
   async addDesc({request, params: {id}, auth, response}) {
-
     try {
+      //const user = await auth.getUser()
       const product = await Product.findByOrFail('id', id)
       let desc= await product.description().create(request.all())
       return response.json({

@@ -1,14 +1,15 @@
-@import url('https://fonts.googleapis.com/css?family=Montserrat:300');
+@import url("https://fonts.googleapis.com/css?family=Montserrat:300");
 
-html, body {
+html,
+body {
   height: 100%;
   width: 100%;
 }
 
 body {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 300;
-  background-image: url("/splash.png");
+  background-image: url("/bg.png");
   background-color: #220052;
 }
 
@@ -45,7 +46,7 @@ section:before {
   background-size: 100%;
   margin-bottom: 35px;
   opacity: 0;
-  animation: slideUp 1s cubic-bezier(0.19, 1, 0.30, 1) 1.3s forwards;
+  animation: slideUp 1s cubic-bezier(0.19, 1, 0.3, 1) 1.3s forwards;
 }
 
 .title {
@@ -54,19 +55,18 @@ section:before {
   height: 36px;
   background-size: 100%;
   opacity: 0;
-  animation: slideUp 1s cubic-bezier(0.19, 1, 0.30, 1) 0.2s forwards;
+  animation: slideUp 1s cubic-bezier(0.19, 1, 0.3, 1) 0.2s forwards;
 }
 
 .subtitle {
   margin-top: 25px;
-  color: #BDB3CB;
+  color: #bdb3cb;
   font-size: 17px;
   text-align: center;
   letter-spacing: 0.5;
   opacity: 0;
-  animation: slideUp 1s cubic-bezier(0.19, 1, 0.30, 1) 0.5s forwards;
+  animation: slideUp 1s cubic-bezier(0.19, 1, 0.3, 1) 0.5s forwards;
 }
-
 
 a {
   color: inherit;

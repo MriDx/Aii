@@ -22,7 +22,9 @@ class FileController {
         });
 
         if (!imageFile.moved()) {
-            return imageFile.error();
+            return response.status(403).json({
+                error: imageFile.error()
+            })
         }
         return response.json({
             status: 'success',
@@ -75,6 +77,16 @@ class FileController {
             return response.download(Helpers.publicPath(`${dir}/${file}`))
         }
         return 'File does not exist'
+    }
+
+    async tmpImage ({ params, response }) {
+        const filePath = Helpers.tmpPath(`tmp_uploads/${params.file}`);
+        const isExist = await Drive.exists(filePath);
+
+        if (isExist) {
+            return response.download(filePath);
+        }
+        return 'File does not exist';
     }
 
 }
