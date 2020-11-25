@@ -16,7 +16,29 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
-Route.on('/').render('welcome')
+Route.on('/').render('aii')
+
+//Route.get('/', 'JobController.home')
+
+Route.on('/write-to-us').render('forms.writeus')
+Route.post('/write-to-us', 'MessageController.create').validator('CreateMessage')
+
+/* Route.on('/signup').render('auth.signup')
+Route.post('/signup', 'UserController.create').validator('CreateUser')
+
+Route.on('/login').render('auth.login')
+Route.post('/login', 'UserController.login').validator('LoginUser')
+
+Route.get('/logout', async ({auth, response}) => {
+  await auth.logout()
+  return response.redirect('/')
+})
+
+Route.get('/post-a-job', 'JobController.userIndex')
+Route.get('/post-a-job/delete/:id', 'JobController.delete')
+Route.get('/post-a-job/edit/:id', 'JobController.edit')
+Route.post('/post-a-job/update/:id', 'JobController.update').validator('CreateJob')
+Route.post('/post-a-job', 'JobController.create').validator('CreateJob') */
 
 
 

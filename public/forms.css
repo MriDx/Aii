@@ -1,0 +1,51 @@
+.job-container {
+  grid-template-columns: auto;
+  padding: 2em;
+  width: 30%;
+}
+.message-container {
+  grid-template-columns: auto;
+  padding: 2em;
+  width: 30%;
+}
+label {
+  font-weight: bold;
+}
+input[type="text"],
+input[type="email"],
+input[type="password"],
+span,
+textarea {
+  width: calc(100% - 4em);
+  display: block;
+  padding: 0.5em;
+  margin-bottom: 20px;
+  border: 2px solid lightgray;
+  resize: none;
+}
+/* Change the white to any color ;) */
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px white inset;
+}
+
+button {
+  padding: 0.5em;
+  background: #ffffff;
+  border: 0;
+  min-width: 10px;
+  color: rgb(255, 20, 20);
+  font-size: 1.2em;
+  font-family: "Montserrat";
+  text-transform: uppercase;
+  font-weight: bold;
+  border-radius: 5px;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+span {
+  display: block;
+  background: yellow;
+  padding: 0.3em;
+  margin-bottom: 20px;
+}

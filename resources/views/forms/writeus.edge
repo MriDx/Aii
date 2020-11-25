@@ -1,0 +1,59 @@
+@layout('layouts.main1')
+
+@section('title')
+  Aii - On Stop Mens Fashion
+@endsection
+
+@section('extracss')
+  {{style('forms')}}
+
+  {{ style('aii') }}
+@endsection
+
+
+@section('content')
+<div class="header-text">
+	<h1>Write to Us</h1>
+</div>
+
+
+  <div class="message-container">
+	  @if(flashMessage('message'))
+		<span> {{flashMessage('message')}} </span>
+	  @endif
+  <form action="{{ route('MessageController.create') }}" method="POST">
+
+	{{csrfField()}}
+
+		<label for="name">Name *</label>
+		<input type="text" name="name" value="{{ old('name', '') }}" >
+		@if(hasErrorFor('name'))
+			<span>
+				{{ getErrorFor('name')}}
+			</span>
+		@endif
+
+		<label for="email">Email *</label>
+		<input type="email" name="email" value="{{ old('email', '') }}" >
+		@if(hasErrorFor('email'))
+			<span>
+				{{ getErrorFor('email')}}
+			</span>
+		@endif
+
+		<label for="message">Message *</label>
+		<br>
+		<textarea rows="3" class="message-field" type="text" name="message" placeholder="your message">
+		</textarea>
+		<br>
+		@if(hasErrorFor('message'))
+			<span>
+				{{ getErrorFor('message')}}
+			</span>
+		@endif
+
+		<button type="submit">Send</button>
+	  </form>
+  </div>
+
+@endsection

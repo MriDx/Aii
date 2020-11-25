@@ -1,0 +1,26 @@
+content {
+  width: 60%;
+  justify-self: center;
+}
+
+.header-text {
+  font-size: larger;
+  color: white;
+}
+
+.download-btn {
+  color: #ed3833;
+  font-weight: 800;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", "Arial", "sans-serif";
+  height: 50px;
+  width: 300px;
+  border-radius: 10px;
+  border: 1px;
+  box-shadow: inset;
+  text-decoration-color: #ed3833;
+  background-color: white;
+}
+
+.download-button {
+  height: 100px;
+}
