@@ -188,6 +188,77 @@ class CategoryController {
   async destroy ({ params, request, response }) {
   }
 
+
+  async createCategory({ request, auth, response }) {
+    const {name, image} = request.all()
+    try {
+      const validationOptions = {
+        types: ['image'],
+        size: '1mb',
+      }
+      const imageFile = request.file('image', validationOptions)
+      const imgName = name.replace(/\s/g, "")
+      const newImg = `category/${imgName}.png`
+      await imageFile.move(Helpers.publicPath('category'), {
+        name: `${imgName}.png`,
+        overwrite: true,
+      })
+      if (!imageFile.moved()) {
+        throw imageFile.error()
+      }
+      const category = await Category.create({
+        name: name,
+        image: newImg
+      })
+      return response.json({
+        status: 'succcess',
+        message: 'Category created !',
+        category: category
+      })
+    } catch (error) {
+      return response.status(403).json({
+        status: 'failed',
+        message: 'Failed to create category ! Try some different name or check image, size should be below 1MB'
+      })
+    }
+  }
+
+  async updateCategory({ request, response }) {
+    const {id} = request.all()
+    try {
+      let category = await Category.findByOrFail('id', id)
+      const validationOptions = {
+        types: ['image'],
+        size: '1mb',
+      }
+      const imageFile = request.file('image', validationOptions)
+      const imgName = category.name.replace(/\s/g, "")
+      const newImg = `category/${imgName}.png`
+      await imageFile.move(Helpers.publicPath('category'), {
+        name: `${imgName}.png`,
+        overwrite: true,
+      })
+      if (!imageFile.moved()) {
+        throw imageFile.error()
+      }
+      category.image = newImg
+
+      await category.save()
+
+      return response.json({
+        status: 'success',
+        message: 'Image changed !',
+        category: category
+      })
+    } catch (error) {
+      return response.status(403).json({
+        status: 'failed',
+        message: 'Failed to update category !'
+      })
+    }
+
+  }
+
 }
 
 module.exports = CategoryController

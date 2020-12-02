@@ -159,6 +159,8 @@ Route.group('adminapp', () => {
   Route.post('category/add', 'CategoryController.store')
   //Route.get('categories', 'CategoryController.index')
   Route.post('category/:id', 'CategoryController.update')
+  Route.post('createCategory', 'CategoryController.createCategory')
+  Route.post('updateCategory', 'CategoryController.updateCategory')
 
   //sizes
   Route.post('size', 'SizeController.store')
