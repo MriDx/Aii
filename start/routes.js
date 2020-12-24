@@ -74,7 +74,7 @@ Route.get('download/:fileName', 'FileController.download');
 //Route.post('addImage', 'ImageController.store')
 
 Route.group(() => {
-  Route.get('content/:dir/:file', 'FileController.file')
+  //Route.get('content/:dir/:file', 'FileController.file')
 })
 
 
@@ -128,7 +128,7 @@ Route.get('home', 'HomeController.index').middleware('auth').prefix('api/v1')
 
 
 Route.get('featured', 'FeaturedController.index').middleware('auth').prefix('api/v1')
-//Route.post('featured/add', 'FeaturedController.store').middleware('auth').prefix('api/v1')
+Route.post('featured/add', 'FeaturedController.store').middleware('auth').prefix('api/v1')
 
 Route.get('category/products/:id/:page', 'ProductController.bycategory').prefix('api/v1')
 
@@ -177,7 +177,7 @@ Route.group('adminapp', () => {
   Route.get('content/:file', 'FileController.tmpImage')
   Route.post('saveImage/:id', 'ImageController.saveBulk')
   Route.post('product/addImage', 'ImageController.store')
-  Route.get('content/:dir/:file', 'FileController.file')
+  //Route.get('content/:dir/:file', 'FileController.file')
 }).prefix('admin/api/v1/')
 
 Route.on('/*').render('welcome')
