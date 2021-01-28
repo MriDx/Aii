@@ -63,6 +63,53 @@ class HomeController {
 		}
 	}
 
+
+	async products({ request, auth, response }) {
+		try {
+			const f = await Featured.query()
+			.with('product', function(builder) {
+				builder.with('image', function(builder) {
+					builder.select('images.id', 'images.product_id', 'images.url')
+				})
+				.with('stock', function(builder) {
+					builder.with('size')
+				})
+				.with('category')
+			})
+			.fetch()
+			const c = await Category.query().withCount('products').fetch()
+			const p = await HomeProduct.query()
+			.with('product', b => {
+				b.where('stock', '1')
+				.with('image', function(builder) {
+					builder.select('images.id', 'images.product_id', 'images.url')
+				})
+				.with('stock', function(builder) {
+					builder.with('size')
+				})
+				.with('category')
+			})
+			.orderBy('id', 'desc')
+			.limit(20)
+			.fetch()
+			const cart = {}
+			try {
+				const user = await auth.getUser()
+				cart = await Cart.query().where('user_id', user.id).fetch()
+			} catch (error) {
+
+			}
+			const data = {featured: f, categories : c, products: p, cart: cart}
+			return response.json({
+				status: 'success',
+				data : data
+			})
+		} catch (error) {
+			return response.status(403).json({status: 'failed', error})
+		}
+
+	}
+
 }
 
 module.exports = HomeController

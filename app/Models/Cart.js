@@ -9,6 +9,10 @@ class Cart extends Model {
 		return this.belongsTo('App/Models/User')
 	}
 
+	demoUser() {
+		return this.belongsTo('App/Models/DemoUser')
+	}
+
 	product() {
 		return this.belongsTo('App/Models/Product')
 	}
