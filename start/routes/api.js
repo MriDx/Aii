@@ -1,19 +1,5 @@
 'use strict'
 
-/*
-|--------------------------------------------------------------------------
-| Routes
-|--------------------------------------------------------------------------
-|
-| Http routes are entry points to your web application. You can create
-| routes for different URL's and bind Controller actions to them.
-|
-| A complete guide on routing is available here.
-| http://adonisjs.com/docs/4.1/routing
-|
-*/
-
-/** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
 //Route.get('/', 'JobController.home')
@@ -32,13 +18,26 @@ Route.group(() => {
 	Route.get('product/:id', 'ProductController.show')
 
 	Route.get('product/:product_id/:size_id', 'StockController.checkStock')
+
+	//Route.get('products/byQuery', 'ProductController.byQuery')
+
+
 }).prefix('api/v1/')
 
-Route.get('download/:fileName', 'FileController.download')
-
 Route.group(() => {
-	//Route.get('content/:dir/:file', 'FileController.file')
-})
+
+	Route.get('price-below/:price', 'ProductController.byprice_below')
+
+	Route.get('price-below/:price/:catId', 'ProductController.byprice_below_catId')
+
+	Route.get('price-above/:price', 'ProductController.byprice_above')
+
+	Route.get('price-above/:price/:catId', 'ProductController.byprice_above_catId')
+
+}).prefix('api/v1/products/query')
+
+//Route.get('download/:fileName', 'FileController.download')
+
 
 Route.group(function () {
 	Route.post('addToCart', 'CartController.add') //add to cart
@@ -55,9 +54,8 @@ Route.group(function () {
 	Route.post('order/return/:id', 'OrderController.orderReturn') //return order
 
 	Route.post('product/review', 'ReviewController.store') //add product review
-})
-	.middleware('auth')
-	.prefix('api/v1/')
+
+}).middleware('auth').prefix('api/v1/')
 
 Route.post('register', 'AuthController.register').prefix('/api/v1') //register user
 Route.post('login', 'AuthController.login').prefix('/api/v1') //login user
@@ -83,12 +81,10 @@ Route.get('category/products/:id/:page', 'ProductController.bycategory').prefix(
 )
 
 //add product to homepage
-Route.post('customize/home/product', 'HomeProductController.add').prefix(
-	'api/v1/'
-)
-Route.post(
-	'customize/home/products',
-	'HomeProductController.addMultiple'
+Route.post('customize/home/product', 'HomeProductController.add')
+	.prefix('api/v1/')
+
+Route.post('customize/home/products', 'HomeProductController.addMultiple'
 ).prefix('api/v1/')
 
 Route.group('adminapp', () => {
@@ -145,4 +141,9 @@ Route.group(function () {
 	Route.get('product/:id', 'ProductController.show') //single product
 
 	Route.get('product/:product_id/:size_id', 'StockController.checkStock') //check single product stock
-}).prefix('api/v2')
+
+}).prefix('api/v1/demo')
+
+Route.get('.well-known/assetlinks.json', 'FileController.assetsLink')
+Route.get('.wellknown/assetlinks.json', 'FileController.assetsLink1')
+

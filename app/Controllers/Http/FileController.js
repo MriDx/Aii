@@ -89,6 +89,15 @@ class FileController {
         return 'File does not exist';
     }
 
+    async assetsLink({ request, response }) {
+        //return 'hello'
+        return response.download(Helpers.publicPath('assetlinks.json'))
+    }
+    async assetsLink1({ request, response }) {
+        //return 'hello'
+        return response.download(Helpers.publicPath('assetlinks.d.json'))
+    }
+
 }
 
 module.exports = FileController

@@ -7,6 +7,7 @@
 const Product = use('App/Models/Product')
 const Helpers = use('Helpers')
 const Drive = use('Drive')
+const Stock = use('App/Models/Stock')
 
 /**
  * Resourceful controller for interacting with products
@@ -241,6 +242,94 @@ class ProductController {
         status: 'success',
         data : Object.assign(tags, product)
       })
+    } catch (error) {
+      return response.status(403).json({
+        status: 'failed',
+        error
+      })
+    }
+  }
+
+
+  async byprice_below({ request, params: {price}, response }) {
+    try {
+      let stocks = await Stock.query()
+        .where('stock', '>', 0)
+        .where('price', '<=', price)
+        .with('product', (b) => {
+          b.with('image')
+        })
+        .paginate()
+      return stocks
+    } catch (error) {
+      return response.status(403).json({
+        status: 'failed',
+        error
+      })
+    }
+  }
+
+  async byprice_below_catId({ request, params: { price, catId }, response }) {
+    try {
+      let stocks = await Stock.query()
+        .where('category_id', catId)
+        .where('stock', '>', 0)
+        .where('price', '<=', price)
+        .with('product', (b) => {
+          b.with('image')
+        })
+        .paginate()
+      return stocks
+    } catch (error) {
+      return response.status(403).json({
+        status: 'failed',
+        error
+      })
+    }
+  }
+
+  async byprice_above({ request, params: { price }, response }) {
+    try {
+      let stocks = await Stock.query()
+        .where('stock', '>', 0)
+        .where('price', '>=', price)
+        .with('product', (b) => {
+          b.with('image')
+        })
+        .paginate()
+      return stocks
+    } catch (error) {
+      return response.status(403).json({
+        status: 'failed',
+        error
+      })
+    }
+  }
+
+  async byprice_above_catId({ request, params: { price, catId }, response }) {
+    try {
+      let stocks = await Stock.query()
+        .where('category_id', catId)
+        .where('stock', '>', 0)
+        .where('price', '>=', price)
+        .with('product', (b) => {
+          b.with('image')
+        })
+        //.orderBy('price', 'DESC')
+        .paginate()
+      return stocks
+    } catch (error) {
+      return response.status(403).json({
+        status: 'failed',
+        error
+      })
+    }
+  }
+
+
+  async byQuery({ request, response }) {
+    try {
+
     } catch (error) {
       return response.status(403).json({
         status: 'failed',
