@@ -7,7 +7,7 @@ const Model = use('Model')
 class DemoUser extends Model {
 
 	cart() {
-		return this.hasMany('App/Models/Cart')
+		return this.hasMany('App/Models/DemoCart')
 	}
 
 }

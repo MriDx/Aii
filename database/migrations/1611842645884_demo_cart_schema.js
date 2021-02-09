@@ -7,12 +7,12 @@ class DemoCartSchema extends Schema {
   up () {
     this.create('demo_carts', (table) => {
       table.increments()
-      table.integer('demo_id').unsigned()
+      table.integer('demo_user_id').unsigned()
       table.integer('product_id').unsigned()
       table.integer('size_id').unsigned()
       table.integer('qty').unsigned()
       table.string('status')
-      table.foreign('demo_id').references('demo_users.id').onDelete('cascade')
+      table.foreign('demo_user_id').references('demo_users.id').onDelete('cascade')
       table.foreign('product_id').references('products.id').onDelete('cascade')
       table.foreign('size_id').references('sizes.id').onDelete('cascade')
       table.integer('stock_id').unsigned()

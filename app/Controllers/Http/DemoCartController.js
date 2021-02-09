@@ -6,6 +6,7 @@
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 const DemoCart = use('App/Models/DemoCart')
+const DemoUser = use('App/Models/DemoUser')
 const Stock = use('App/Models/Stock')
 const Cart = use('App/Models/Cart')
 
@@ -96,20 +97,18 @@ class DemoCartController {
 
 
   async addToCart({ request, response }) {
-    var token = request.headers().authorization.split(' ')[1]
     let message
-    if (token == 'a101mk') {
+    if (request.headers().authorization != null && request.headers().authorization.split(' ')[1] == 'a101mk') {
       //auth done
       let { product_id, qty, size_id, demo_id, status, stock_id } = request.all()
       try {
-        let m = await DemoCart.query().where('demo_id', demo_id).where({ 'product_id': product_id, 'size_id': size_id }).first()
+        let m = await DemoCart.query().where('demo_user_id', demo_id).where({ 'product_id': product_id, 'size_id': size_id }).first()
         if (m == null) {
           let stock = await Stock.query().where({ 'product_id': product_id, 'size_id': size_id }).first()
 
           if (stock != null && stock.stock > 0) {
-            console.log('inside stock != null')
             let m = new DemoCart()
-            m.demo_id = demo_id
+            m.demo_user_id = demo_id
             m.product_id = product_id
             m.size_id = size_id
             m.qty = qty
@@ -142,27 +141,55 @@ class DemoCartController {
           error
         })
       }
+    } else {
+      return response.status(401).json({
+        status: 'failed'
+      })
     }
   }
 
-  async cart({ request, response }) {
-    let carts = await DemoCart.query().where('demo_id', 1).fetch()
-    let t =[]
-
-    for (let i = 0; i < carts.rows.length; i++) {
-      let x = carts.rows[i]
-      let o = {
-        product_id: x.product_id,
-        size_id: x.size_id,
-        qty: x.qty,
-        status: x.status,
-        stock_id: x.stock_id
-      }
-      t[i] = o
+  async cart({ request, params: { id }, response }) {
+    if (request.headers().authorization != null && request.headers().authorization.split(' ')[1] == 'a101mk') {
+      return await DemoCart.query()
+        .where('demo_user_id', id)
+        .with('product', (b) => {
+          b.with('image')
+        })
+        .with('stock', function (builder) {
+          builder.with('size')
+        })
+        .fetch()
+    } else {
+      return response.status(401).json({
+        status: 'failed'
+      })
     }
-    await Cart.createMany(t)
-    return t
   }
+
+  async removeCart({ request, params: { id, cartId }, response }) {
+    if (request.headers().authorization != null && request.headers().authorization.split(' ')[1] == 'a101mk') {
+      let demoUser = await DemoUser.findByOrFail('id', id)
+      let rows = await demoUser.cart().where('id', cartId).delete()
+      let items = await demoUser.cart()
+        .with('product', (b) => {
+          b.with('image')
+        })
+        .with('stock', function (builder) {
+          builder.with('size')
+        })
+        .fetch()
+      return response.json({
+        status: 'success',
+        rows_deleted: rows,
+        items: items
+      })
+    } else {
+      return response.status(401).json({
+        status: 'failed'
+      })
+    }
+  }
+
 }
 
 module.exports = DemoCartController

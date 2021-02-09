@@ -86,14 +86,28 @@ class AuthController {
   }
 
   async migrateDemoUser({ request, auth, response }) {
-    var token = request.headers().authorization.split(' ')[1]
-    if (token == 'a101mk') {
+    if (request.headers().authorization != null && request.headers().authorization.split(' ')[1] == 'a101mk') {
       const trx = await Database.beginTransaction()
       try {
         //migrate user
-        let { email, password, name, demo_id } = request.all()
+        let { email, password, name, demo_user_id } = request.all()
+        try {
+          await DemoUser.findByOrFail('id', demo_user_id)
+        } catch (error) {
+          return response.status(200).json({
+            status: 'failed',
+            code: 'NDU', //no demo user
+            error
+          })
+        }
         let u = await User.findBy('email', email)
         if (u == null) {
+          if (name == null) {
+            return response.status(200).json({
+              status: 'failed',
+              code: 'UNF' //user not found
+            })
+          }
           //user not exist
           u = new User()
           u.email = email
@@ -101,12 +115,19 @@ class AuthController {
           u.name = name
           await u.save(trx)
           //user registered
-        } else if (await auth.attempt(email, password)) {
-          //auth done
+        } else {
+          try {
+            await auth.attempt(email, password)
+          } catch (error) {
+            return response.status(200).json({
+              status: 'failed',
+              code: 'AF' //auth failed
+            })
+          }
         }
         //user registered
         //migrate data
-        let carts = await DemoCart.query(trx).where('demo_id', demo_id).fetch()
+        let carts = await DemoCart.query(trx).where('demo_user_id', demo_user_id).fetch()
         //console.log(carts)
         let t = []
 
@@ -127,8 +148,8 @@ class AuthController {
         }
         let c = await u.cart().createMany(t, trx)
         //let c = await u.cart().fetch()
-        await DemoUser.query(trx).where('id', demo_id).delete()
-        await DemoCart.query(trx).where('demo_id', demo_id).delete()
+        await DemoUser.query(trx).where('id', demo_user_id).delete()
+        await DemoCart.query(trx).where('demo_user_id', demo_user_id).delete()
         let tk = await auth.generate(u)
         await trx.commit()
         return response.json({
@@ -148,6 +169,34 @@ class AuthController {
       console.log('un -auth')
     }
   }
+
+  async sign({ request, auth, response }) {
+    try {
+      try {
+        if (await auth.attempt("mail@1.com", "password")) {
+          return response.json({
+            status: 'auth done'
+          })
+        } else {
+          return response.json({
+            status: 'failed maxxai'
+
+          })
+        }
+      } catch (error) {
+        return response.json({
+          status: 'failed maxxai-2',
+        })
+      }
+    } catch (error) {
+      return response.status(403).json({
+        status: 'error',
+        message: 'failed to create account',
+        error
+      })
+    }
+  }
+
 }
 
 module.exports = AuthController

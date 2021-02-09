@@ -16,6 +16,10 @@ class Stock extends Model {
 	cart() {
 		return this.belongsToMany('App/Models/Cart')
 	}
+
+	demoCart() {
+		return this.belongsToMany('App/Models/DemoCart')
+	}
 }
 
 module.exports = Stock

@@ -22,6 +22,10 @@ class Product extends Model {
 		return this.hasMany('App/Models/Cart')
 	}
 
+	demoCart() {
+		return this.hasMany('App/Models/DemoCart')
+	}
+
 	orderitems() {
 		return this.belongsToMany('App/Models/OrderItem')
 	}

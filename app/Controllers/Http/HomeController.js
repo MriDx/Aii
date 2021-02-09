@@ -11,6 +11,9 @@ const Cart = use('App/Models/Cart')
 
 const HomeProduct = use('App/Models/HomeProduct')
 
+const DemoUser = use('App/Models/DemoUser')
+const DemoCart = use('App/Models/DemoCart')
+
 class HomeController {
 
 	async index({ request, auth, response }) {
@@ -64,7 +67,7 @@ class HomeController {
 	}
 
 
-	async products({ request, auth, response }) {
+	async products({ request, params:{id},  auth, response }) {
 		try {
 			const f = await Featured.query()
 				.with('product', function (builder) {
@@ -92,17 +95,15 @@ class HomeController {
 				.orderBy('id', 'desc')
 				.limit(20)
 				.fetch()
-			const cart = []
-			try {
-				const user = await auth.getUser()
-				cart = await Cart.query().where('user_id', user.id).fetch()
-			} catch (error) {
-
+			let cart = []
+			let demoUser = await DemoUser.findBy('id', id)
+			if (demoUser != null) {
+				cart = await DemoCart.query().where('demo_user_id', demoUser.id).fetch()
 			}
-			const data = { featured: f, categories: c, products: p, cart: cart }
+
 			return response.json({
 				status: 'success',
-				data: data
+				data: { featured: f, categories: c, products: p, cart: cart }
 			})
 		} catch (error) {
 			return response.status(403).json({ status: 'failed', error })

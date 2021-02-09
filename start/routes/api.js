@@ -123,16 +123,11 @@ Route.group('adminapp', () => {
 	//Route.get('content/:dir/:file', 'FileController.file')
 }).prefix('admin/api/v1/')
 
-Route.group(() => {
-	Route.post('demo_login', 'DemoUserController.login')
-	Route.post('addToCart', 'DemoCartController.addToCart')
-	Route.get('carts', 'DemoUserController.cart')
-	Route.post('demoRegister', 'AuthController.migrateDemoUser')
-}).prefix('api/v2/demo')
 
-//api version 2
+//api version 1 with demo
 Route.group(function () {
-	Route.get('home', 'HomeController.products') //home un-authenticated
+
+	Route.get('home/:id', 'HomeController.products') //home un-authenticated
 
 	Route.get('products', 'ProductController.index') //list products
 
@@ -141,6 +136,14 @@ Route.group(function () {
 	Route.get('product/:id', 'ProductController.show') //single product
 
 	Route.get('product/:product_id/:size_id', 'StockController.checkStock') //check single product stock
+
+	Route.post('login', 'DemoUserController.login')
+	Route.post('addToCart', 'DemoCartController.addToCart')
+	Route.get('carts/:id', 'DemoCartController.cart')
+	Route.get('/carts/:id/remove/:cartId', 'DemoCartController.removeCart')
+	Route.post('register', 'AuthController.migrateDemoUser')
+
+	Route.get('sign', 'AuthController.sign')
 
 }).prefix('api/v1/demo')
 
