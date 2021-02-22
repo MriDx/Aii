@@ -17,6 +17,8 @@ Route.group(() => {
 
 	Route.get('product/:id', 'ProductController.show')
 
+	Route.get('product/:id/meta', 'ProductController.meta')
+
 	Route.get('product/:product_id/:size_id', 'StockController.checkStock')
 
 	//Route.get('products/byQuery', 'ProductController.byQuery')

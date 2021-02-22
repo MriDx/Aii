@@ -338,6 +338,19 @@ class ProductController {
     }
   }
 
+  async meta({ request, params: { id }, response }) {
+    try {
+      let product = await Product.query().where('id', id)
+        .with('description')
+        .with('reviews', function (builder) {
+        builder.limit(5)
+      }).first()
+      return response.json({ status: 'success', product: product })
+    } catch (error) {
+      return response.status(404).json({ status: 'failed', product: '' })
+    }
+  }
+
 }
 
 module.exports = ProductController

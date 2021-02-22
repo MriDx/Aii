@@ -4,6 +4,8 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
+const ProductDescription = use('App/Models/ProductDescription')
+
 /**
  * Resourceful controller for interacting with productdescriptions
  */
@@ -52,7 +54,13 @@ class ProductDescriptionController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
+  async show({ params: { id }, request, response, view }) {
+    try {
+      let d = await ProductDescription.findBy('product_id', id)
+      return response.json({status: 'success', data: {description: d, reviews: []}})
+    } catch (error) {
+      return response.status(404).json({status: 'failed', data: ''})
+    }
   }
 
   /**
@@ -88,6 +96,8 @@ class ProductDescriptionController {
    */
   async destroy ({ params, request, response }) {
   }
+
+
 }
 
 module.exports = ProductDescriptionController
