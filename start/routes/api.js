@@ -5,9 +5,7 @@ const Route = use('Route')
 //Route.get('/', 'JobController.home')
 
 
-Route.post('/write-to-us', 'MessageController.create').validator(
-	'CreateMessage'
-)
+Route.post('/write-to-us', 'MessageController.create').validator('CreateMessage')
 
 //Products
 Route.group(() => {
@@ -17,15 +15,16 @@ Route.group(() => {
 
 	Route.get('product/:id', 'ProductController.show')
 
+	Route.get('product/:id/wc', 'ProductController.showWC') // get product by id along with cart
+
+	Route.get('product/:id/wc/:demoId', 'ProductController.showWCD') // get product by id along with cart
+
 	Route.get('product/:id/meta', 'ProductController.meta')
 
 	Route.get('product/:product_id/:size_id', 'StockController.checkStock')
-
-	//Route.get('products/byQuery', 'ProductController.byQuery')
-
-
 }).prefix('api/v1/')
 
+//product advance operations
 Route.group(() => {
 
 	Route.get('price-below/:price', 'ProductController.byprice_below')
@@ -38,9 +37,8 @@ Route.group(() => {
 
 }).prefix('api/v1/products/query')
 
-//Route.get('download/:fileName', 'FileController.download')
 
-
+// Cart operations
 Route.group(function () {
 	Route.post('addToCart', 'CartController.add') //add to cart
 	Route.get('cartItems', 'CartController.cartItems') //cart items
@@ -54,11 +52,11 @@ Route.group(function () {
 	Route.get('order/:id', 'OrderController.orderData') //order data
 	Route.post('order/cancel/:id', 'OrderController.cancelOrder') //cancel order
 	Route.post('order/return/:id', 'OrderController.orderReturn') //return order
-
 	Route.post('product/review', 'ReviewController.store') //add product review
 
 }).middleware('auth').prefix('api/v1/')
 
+// user operations
 Route.post('register', 'AuthController.register').prefix('/api/v1') //register user
 Route.post('login', 'AuthController.login').prefix('/api/v1') //login user
 
@@ -69,6 +67,7 @@ Route.group(() => {
 	.middleware('auth')
 	.prefix('/api/v1')
 
+//app home page
 Route.get('home', 'HomeController.index').middleware('auth').prefix('api/v1')
 
 Route.get('featured', 'FeaturedController.index')

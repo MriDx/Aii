@@ -5,7 +5,39 @@ const Order = use('App/Models/Order')
 const Admin = use('App/Models/Admin')
 const Category = use('App/Models/Category')
 
+const WebAdmin = use('App/Models/WebAdmin')
+
 class AdminController {
+
+	async check({ request, view, auth, response }) {
+		try {
+			await auth.check()
+			//let user = await auth.getUser()
+			return response.redirect('/dashboard')
+
+		} catch (error) {
+			return view.render('index')
+		}
+	}
+
+	async register({ request, response, auth }) {
+		//const user = await User.create(request.only(['name', 'email', 'password']))
+		const user = await WebAdmin.create(request.only(['name', 'email', 'password']))
+
+		await auth.login(user)
+		return response.redirect('/dashboard')
+	}
+
+	async login({ request, auth, response, session }) {
+		const { email, password } = request.all()
+		try {
+			await auth.attempt(email, password)
+			return response.redirect('/dashboard')
+		} catch (error) {
+			session.flash({ loginError: 'These credentials do not work' })
+			return response.redirect('/')
+		}
+	}
 
 	async home({request, auth, response}) {
 		try {

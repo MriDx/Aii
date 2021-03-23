@@ -8,6 +8,7 @@ const Product = use('App/Models/Product')
 const Helpers = use('Helpers')
 const Drive = use('Drive')
 const Stock = use('App/Models/Stock')
+const DemoUser = use('App/Models/DemoUser')
 
 /**
  * Resourceful controller for interacting with products
@@ -348,6 +349,74 @@ class ProductController {
       return response.json({ status: 'success', product: product })
     } catch (error) {
       return response.status(404).json({ status: 'failed', product: '' })
+    }
+  }
+
+  async showWC({ request, params: { id }, auth, response }) {
+    try {
+      let cartCount = 0
+      try {
+        let user = await auth.getUser()
+        cartCount = await user.cart().getCount()
+      } catch (error) {
+
+      }
+
+      let product = await Product.query().where('id', id)
+        .with('stock', b => {
+          b.where('stock', '>', 0).with('size')
+        })
+        .with('image')
+        .with('description')
+        .with('reviews', b => {
+          b.orderBy('id', 'desc').limit(10)
+        })
+        .first()
+      return response.status(200).json({
+        cartCount: cartCount,
+        product: product
+      })
+
+    } catch (error) {
+      return response.status(404).json({
+        status: 'failed',
+        message: 'product not found',
+        error
+      })
+    }
+  }
+
+  async showWCD({ request, params: { id, demoId }, auth, response }) { // for demo user
+    try {
+      let cartCount = 0
+      try {
+        let user = await DemoUser.findByOrFail('id', demoId)
+        cartCount = await user.cart().getCount()
+      } catch (error) {
+
+      }
+
+      let product = await Product.query().where('id', id)
+        .with('stock', b => {
+          b.where('stock', '>', 0).with('size')
+        })
+        .with('image')
+        .with('description')
+        .with('reviews', b => {
+          b.orderBy('id', 'desc').limit(10)
+        })
+        .first()
+      return response.status(200).json({
+        cartCount: cartCount,
+        product: product
+      })
+
+    } catch (error) {
+      return response.status(404).json({
+        status: 'failed',
+        message: 'product not found',
+        error
+      })
     }
   }
 

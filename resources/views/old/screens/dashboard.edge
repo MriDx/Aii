@@ -1,0 +1,112 @@
+@layout('layouts.dashboard')
+
+@section('extracss')
+@endsection
+
+@section('extrajs')
+
+<script>
+	/* $(document).ready(function(){
+	  $("#ajax-btn").click(function(){
+		$.ajax({
+			url: "http://127.0.0.1:3333/admin/api/v1/products/1",
+			headers: { 'Access-Control-Allow-Origin': '*'},
+			type: "GET",
+			success: function(result){
+				//console.log(result);
+				  //$("#div1").html(result);
+				  document.location.reload(true);
+			},
+			error: function(xhr, status, error) {
+				$("#div1").html(xhr.status +':'+ xhr.statusText+':'+xhr.responseText);
+			}
+		});
+	  });
+	}); */
+</script>
+
+@endsection
+
+@section('content')
+
+@if(flashMessage('message'))
+<div class="alert alert-{{ flashMessage('status') }} alert-dismissible" role="alert">
+	{{flashMessage('message')}}
+	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+</div>
+@endif
+
+
+<div class="row">
+	<div class="col-sm-6">
+		<div class="card">
+			<div class="card-body">
+				<h5 class="card-title">Total Product</h5>
+				<p class="card-text"> {{ products }} </p>
+				<a href="/add-new-product" class="btn btn-primary">Add New Product</a>
+				<a href="/products" class="btn btn-primary">View All</a>
+				<!--<button type="button" class="btn btn-primary" id="ajax-btn">Ajax Call</button>-->
+				<div id="div1">
+					<h2></h2>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-6">
+		<div class="card">
+			<div class="card-body">
+				<h5 class="card-title">Orders</h5>
+				<p class="card-text">400</p>
+				<a href="#" class="btn btn-primary">View Orders</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row mt-4">
+	<div class="col-sm-6">
+		<div class="card">
+			<div class="card-body">
+				<h5 class="card-title">Total Categories</h5>
+				<p class="card-text"> {{ categories }} </p>
+				<a href="/add-category" class="btn btn-primary">Add New Category</a>
+				<a href="/categories" class="btn btn-primary">View All</a>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-6">
+		<div class="card">
+			<div class="card-body">
+				<h5 class="card-title">Size</h5>
+				<p class="card-text"> {{ sizes }}</p>
+				<a href="/add-size" class="btn btn-primary">Add New Size</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row mt-4">
+	<div class="col-sm-6">
+		<div class="card">
+			<div class="card-body">
+				<h5 class="card-title">Products on Home</h5>
+				<p class="card-text"> {{ home }} </p>
+				<a href="/add-to-home" class="btn btn-primary">Add to Home</a>
+				<a href="/home-products" class="btn btn-primary">View All</a>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-6">
+		<div class="card">
+			<div class="card-body">
+				<h5 class="card-title">Size</h5>
+				<p class="card-text"> {{ sizes }}</p>
+				<a href="/add-size" class="btn btn-primary">Add New Size</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+@endsection
