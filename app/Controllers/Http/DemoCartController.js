@@ -190,6 +190,16 @@ class DemoCartController {
     }
   }
 
+  async count({ request, params:{id}, auth, response }) {
+    try {
+      let user = await DemoUser.findByOrFail('id', id)
+      let count = await user.cart().getCount()
+      return response.json({count: count})
+    } catch (error) {
+      return response.status(401).json({status: 'failed'})
+    }
+  }
+
 }
 
 module.exports = DemoCartController

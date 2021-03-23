@@ -173,6 +173,16 @@ class CartController {
     }
   }
 
+  async count({ request, auth, response }) {
+    try {
+      let user = await auth.getUser()
+      let count = await user.cart().getCount()
+      return response.json({count: count})
+    } catch (error) {
+      return response.status(401).json({ status: 'failed' })
+    }
+  }
+
 }
 
 module.exports = CartController

@@ -60,6 +60,9 @@ Route.group(function () {
 Route.post('register', 'AuthController.register').prefix('/api/v1') //register user
 Route.post('login', 'AuthController.login').prefix('/api/v1') //login user
 
+Route.get('cartCount', 'CartController.count').middleware('auth').prefix('api/v1')
+Route.get('cartCount/:id', 'DemoCartController.count').prefix('api/v1/demo')
+
 Route.group(() => {
 	Route.get('me', 'AuthController.me') //get user
 	Route.get('logout', 'AuthController.logout') //logout user
