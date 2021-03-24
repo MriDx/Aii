@@ -1,6 +1,6 @@
 'use strict'
 
-class CreateMessageApi {
+class createMessageApi {
 	get rules() {
 		return {
 			name: 'required',
@@ -24,5 +24,5 @@ class CreateMessageApi {
 
 }
 
-module.exports = CreateMessageApi
+module.exports = createMessageApi
 
