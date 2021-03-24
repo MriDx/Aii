@@ -6,7 +6,7 @@ const Route = use('Route')
 
 
 Route.post('/write-to-us', 'MessageController.create').validator('CreateMessage')
-Route.post('/write-to-us', 'MessageController.store').validator('CreateMessageApi').prefix('api/v1')
+Route.post('/write-to-us', 'MessageController.store').validator('createMessageApi').prefix('api/v1')
 
 //Products
 Route.group(() => {
