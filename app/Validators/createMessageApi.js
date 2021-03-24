@@ -9,6 +9,8 @@ class CreateMessageApi {
 		}
 	}
 
+
+
 	/* get messages() {
 		return {
 			'required': '{{field}} is required',
