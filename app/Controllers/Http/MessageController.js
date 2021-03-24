@@ -24,6 +24,10 @@ class MessageController {
 
 	}
 
+	async store({ request, response }) {
+		return await Message.create(request.all())
+	}
+
 }
 
 module.exports = MessageController
