@@ -4,6 +4,8 @@ const Route = use('Route')
 
 Route.on('/').render('aii')
 Route.on('/write-to-us').render('forms.writeus')
+Route.on('/privacy-policy').render('privacy_policy')
+Route.on('/terms-and-conditions').render('terms')
 
 Route.group(() => {
 
