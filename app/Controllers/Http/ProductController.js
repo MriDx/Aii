@@ -344,7 +344,7 @@ class ProductController {
       let product = await Product.query().where('id', id)
         .with('description')
         .with('reviews', function (builder) {
-        builder.limit(5)
+          builder.orderBy('id', 'desc').limit(10)
       }).first()
       return response.json({ status: 'success', product: product })
     } catch (error) {
