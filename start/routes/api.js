@@ -54,6 +54,9 @@ Route.group(function () {
 	Route.post('order/cancel/:id', 'OrderController.cancelOrder') //cancel order
 	Route.post('order/return/:id', 'OrderController.orderReturn') //return order
 	Route.post('product/review', 'ReviewController.store') //add product review
+	Route.post('review/:id/edit', 'ReviewController.edit') //edit product review
+	Route.delete('review/:id/delete', 'ReviewController.delete') //delete product review
+
 
 }).middleware('auth').prefix('api/v1/')
 
@@ -126,6 +129,9 @@ Route.group('adminapp', () => {
 	Route.post('saveImage/:id', 'ImageController.saveBulk')
 	Route.post('product/addImage', 'ImageController.store')
 	//Route.get('content/:dir/:file', 'FileController.file')
+
+	//cancel order
+	Route.post('order/cancel/:id', 'OrderController.cancelOrderAdmin')
 }).prefix('admin/api/v1/')
 
 

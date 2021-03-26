@@ -168,6 +168,55 @@ class AdminController {
 		}
 	}
 
+	async cancelOrder({request, params: {id}, auth, response}) {
+    const trx = await Database.beginTransaction()
+    let {reason, desc} = request.all()
+    try {
+      const user = await auth.getUser()
+      //return id
+      let order = await user.orders(trx)
+      .where('id', id)
+      //.with('orderitems')
+      .first()
+      order.status = 'Cancelled'
+      await order.save(trx)
+
+      let orderItems = await OrderItem.query(trx).where('order_id', id).fetch()
+
+      for (let i = 0; i < orderItems.rows.length; i++) {
+        const ord = orderItems.rows[i]
+        let productId = ord.product_id
+        let sizeId =  ord.size_id
+        let stock = await Stock.findByOrFail({'product_id': productId, 'size_id': sizeId})
+        stock.stock = stock.stock + 1
+        await stock.save(trx)
+        await Product.query(trx).where('id', productId).update({'stock': 1})
+        console.info(stock)
+      }
+
+      console.info('before cancel')
+      await order.cancel().create({
+        'reason': reason,
+        'description':desc,
+        'user_id': order.user_id
+      },trx)
+
+      console.info('after cancel')
+
+      await trx.commit()
+      return response.json({
+        status: 'success',
+        message: 'order cancelled'
+      })
+    } catch (error) {
+      await trx.rollback()
+      return response.status(403).json({
+        status: 'failed',
+        error: error
+      })
+    }
+  }
+
 }
 
 module.exports = AdminController

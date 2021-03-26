@@ -9,6 +9,10 @@ class Review extends Model {
 		return this.hasOne('App/Models/Product')
 	}
 
+	user() {
+		return this.belongsTo('App/Models/User')
+	}
+
 
 
 }
